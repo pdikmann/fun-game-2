@@ -35,7 +35,7 @@ module.exports = function(grunt) {
           //base: '.',
           //protocol: 'http',
           livereload: true,
-          open: true,
+          //open: true,
         }
       }
     },
