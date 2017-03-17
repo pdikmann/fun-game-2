@@ -5,6 +5,7 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+    // ---------------------------------------------------------------- babel
     "babel": {
       options: {
         sourceMap: true
@@ -12,20 +13,39 @@ module.exports = function(grunt) {
       dist: {
         files: {
           "sketch.js": "src/sketch.js"
-        }
+        },
       },
     },
+    // ---------------------------------------------------------------- grunt-contrib-watch
     watch: {
+      options: {
+        livereload: true,
+      },
       src: {
         files: ['src/*'],
-        tasks: ['default']
+        tasks: ['default'],
       }
-    }
+    },
+    // ---------------------------------------------------------------- grunt-contrib-connect
+    connect: {
+      //uses_defaults: {}
+      server: {
+        options: {
+          //port: 8000,
+          //base: '.',
+          //protocol: 'http',
+          livereload: true,
+          open: true,
+        }
+      }
+    },
   });
 
   // Load the plugins
   grunt.loadNpmTasks('grunt-babel');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-connect');
   // Default task(s).
   grunt.registerTask("default", ["babel"]);
+  grunt.registerTask("serve", ["connect", "watch"]);
 };

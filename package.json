@@ -10,8 +10,10 @@
   "license": "ISC",
   "devDependencies": {
     "babel-preset-env": "^1.2.2",
+    "connect-livereload": "^0.6.0",
     "grunt": "^1.0.1",
     "grunt-babel": "^6.0.0",
+    "grunt-contrib-connect": "^1.0.2",
     "grunt-contrib-watch": "^1.0.0",
     "load-grunt-tasks": "^3.5.2"
   }
