@@ -7,15 +7,18 @@ p5js template using npm, grunt and babel to enable ES6/2015+ or whatever they ca
 ```
 npm install
 grunt
+grunt serve (optional)
 ```
 
-then visit `index.html`.
+then open `index.html` (or visit `localhost:8000` when using `grunt serve`).
 
 # develop
 
 ```
 grunt serve
 ```
+
+then visit `localhost:8000` with live reloading enabled.
 
 # what
 
