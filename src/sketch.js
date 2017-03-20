@@ -1,3 +1,18 @@
+/*
+to dos:
+
+- turn player into physics object
+- give player "shield" ability to deflect balls
+- respawn player when hit by ball
+- check if that's any fun at all
+
+- create a series of rooms for balls to bounce in
+- trigger ball velocity when player enters sensor
+- 
+
+*/
+
+
 new p5(); // so we can use its functions outside of setup(), draw(), etc.
 
 class Sphere {
