@@ -44,6 +44,12 @@ class Player extends Sphere{
   // constructor(){
   //   this.position = createVector( 250, 250 );
   // }
+  use_keys(){
+    this.keys = true;
+  }
+  use_mouse(){
+    this.keys = false;
+  }
   use_floors( floors ){
     this.floors = floors;
   }
@@ -63,9 +69,29 @@ class Player extends Sphere{
     }
     return true;
   }
+  move(){
+    if( this.keys ){
+      this.run();
+    } else {
+      this.follow( mouseX, mouseY );
+    }
+  }
+  run(){
+    let step = createVector( 0, 0 );
+    if( keyIsDown( LEFT_ARROW )) step.add( -5, 0 );
+    if( keyIsDown( RIGHT_ARROW )) step.add( 5, 0 );
+    if( keyIsDown( UP_ARROW )) step.add( 0, -5 );
+    if( keyIsDown( DOWN_ARROW )) step.add( 0, 5 );
+    step.limit( 2 );
+    //...//
+    this.step_safe( step );
+  }
   follow( x_target, y_target ){
     let target = createVector( x_target, y_target ),
         step = p5.Vector.sub( target, this.position ).limit( 100 ).div( 20 );
+    this.step_safe( step );
+  }
+  step_safe( step ){
     this.position.add( step );
     if( this.not_on_floor( this.position )){
       this.position.sub( step );
@@ -104,16 +130,33 @@ const p = new Player();
 const e = new Enemy();
 let floors = [];
 p.use_floors( floors );
+p.use_keys();
 
-let iterations = 32,
+// create circular floor
+{
+  let iterations = 32,
+      radius = 200,
+      min_radius = 20,
+      extra_radius = 30,
+      frac = Math.PI * 2 / iterations;
+  for ( let i = 0; i < iterations; i++ ){
+    let x = cos( frac * i ) * radius + 250,
+        y = sin( frac * i ) * radius + 250;
+    floors[i] = new Floor( x, y, min_radius + random( extra_radius ));
+  }
+}
+
+// create connection tunnel
+let iterations = 12,
     radius = 200,
     min_radius = 20,
-    extra_radius = 60,
-    frac = Math.PI * 2 / iterations;
-for ( let i = 0; i < iterations; i++ ){
-  let x = cos( frac * i ) * radius + 250,
-      y = sin( frac * i ) * radius + 250;
-  floors[i] = new Floor( x, y, min_radius + random( extra_radius ));
+    extra_radius = 15,
+    origin = createVector( 100, 100 ),
+    target = createVector( 450, 450 ),
+    frac = p5.Vector.sub( target, origin ).div( iterations );
+for( let i = 0; i < iterations; i++ ){
+  let spot = p5.Vector.add( origin, p5.Vector.mult( frac, i ));
+  floors.push( new Floor( spot.x, spot.y, min_radius + random( extra_radius )));
 }
 
 function setup() {
@@ -123,7 +166,7 @@ function setup() {
 }
 
 function update(){
-  p.follow( mouseX, mouseY );
+  p.move();
 }
 
 function draw() {
@@ -138,6 +181,14 @@ function draw() {
   p.draw();
   e.draw();
   //
+}
+
+function keyPressed(){
+  p.use_keys();
+}
+
+function mouseMoved(){
+  p.use_mouse();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
