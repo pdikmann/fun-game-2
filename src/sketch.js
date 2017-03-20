@@ -8,7 +8,7 @@ to dos:
 
 - create a series of rooms for balls to bounce in
 - trigger ball velocity when player enters sensor
-- 
+-
 
 */
 
@@ -103,32 +103,34 @@ class Floor extends Sphere{
   highlight(){ this.draw( 1 ); }
   outline(){ this.draw( 2 ); }
   draw( mode ){
-    push();
+    pg.push();
     switch( mode ){
     case 1:
-      fill( 255, 0, 0 );
-      noStroke();
+      pg.fill( 255, 0, 0 );
+      pg.noStroke();
       break;
     case 2:
-      noFill();
-      stroke( 192 );
+      pg.noFill();
+      pg.stroke( 192 );
       break;
     default:
-      fill( 192 );
-      noStroke();
+      pg.fill( 192 );
+      pg.noStroke();
     }
-    translate( this.position.x,
-               this.position.y );
-    ellipseMode( RADIUS );
-    ellipse( 0, 0, this.radius, this.radius );
-    pop();
+    pg.translate( this.position.x,
+                  this.position.y );
+    pg.ellipseMode( RADIUS );
+    pg.ellipse( 0, 0, this.radius, this.radius );
+    pg.pop();
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-const p = new Player();
-const e = new Enemy();
-let floors = [];
+const p = new Player(),
+      e = new Enemy();
+let once = true,
+    pg = {},
+    floors = [];
 p.use_floors( floors );
 p.use_keys();
 
@@ -161,6 +163,7 @@ for( let i = 0; i < iterations; i++ ){
 
 function setup() {
   createCanvas( 512, 512 );
+  pg = createGraphics( 512, 512 );
   ellipseMode( CENTER );
   rectMode( CENTER );
 }
@@ -172,12 +175,17 @@ function update(){
 function draw() {
   update();
   //
-  background( 92 );
-  //
-  for( i in floors ){
-    //floors[i].draw();
-    floors[i].outline();
+  if( once ){
+    once = false;
+    pg.background( 92 );
+    for( i in floors ){
+      floors[i].draw();
+      //floors[i].outline();
+    }
   }
+  //
+  image( pg, 0, 0 );
+  //
   p.draw();
   e.draw();
   //
